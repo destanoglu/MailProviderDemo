@@ -1,13 +1,10 @@
-﻿using System;
-
-namespace Mail.Shared.Contracts
+﻿namespace Mail.Shared.Contracts
 {
-    public interface IHoldMailOrderData
+    public interface IMailContent
     {
         string Sender { get; }
         string Destination { get; }
         string Body { get; }
         MessageType Type { get; }
-        DateTime ScheduleAt { get; }
     }
 }

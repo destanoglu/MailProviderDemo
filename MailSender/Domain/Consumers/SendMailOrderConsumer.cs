@@ -6,12 +6,12 @@ using MassTransit;
 
 namespace Mail.Sender.Domain.Consumers
 {
-    public class SendMailOrderConsumer : IConsumer<IHoldMailOrderData>
+    public class SendMailOrderConsumer : IConsumer<IMailOrder>
     {
-        public Task Consume(ConsumeContext<IHoldMailOrderData> context)
+        public Task Consume(ConsumeContext<IMailOrder> context)
         {
             Console.WriteLine($"Rescheduling mail from {context.Message.Sender} to {context.Message.Destination} at {context.Message.ScheduleAt.ToString("G")}");
-            context.SchedulePublish<IHoldMailData>(context.Message.ScheduleAt,
+            context.SchedulePublish<IMailContent>(context.Message.ScheduleAt,
                 new SendMailDataMessage(
                     context.Message.Sender,
                     context.Message.Destination,

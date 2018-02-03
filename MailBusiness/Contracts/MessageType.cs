@@ -2,8 +2,8 @@
 {
     public enum MessageType
     {
-        OrderMail,
-        LostPasswordMail,
-        ShipmentMail
+        OrderMail = 1,
+        LostPasswordMail = 2,
+        ShipmentMail = 4
     }
 }

@@ -8,14 +8,12 @@ namespace Mail.Sender
     {
         static void Main(string[] args)
         {
-            var settings = ConfigurationManager.Instance.AppSettings.Map<MailSenderSettings>();
-
             HostFactory.Run(config =>
             {
                 config.Service<MailSenderService>(selfHost =>
                 {
                     selfHost.ConstructUsing(() => new MailSenderService());
-                    selfHost.WhenStarted(s => s.StartService(settings));
+                    selfHost.WhenStarted(s => s.StartService());
                     selfHost.WhenStopped(s => s.StopService());
                 });
                 config.SetServiceName("MailSender");

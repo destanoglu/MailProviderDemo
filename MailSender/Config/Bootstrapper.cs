@@ -1,13 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Reflection;
 using Autofac;
 using Common.Logging;
-using GreenPipes;
+using Mail.Sender.Adapters.BusManager;
 using Mail.Sender.Adapters.MailProviders;
 using Mail.Sender.Adapters.ProviderFactories;
 using Mail.Sender.Domain.Consumers;
-using Mail.Sender.Domain.Exceptions;
+using Mail.Sender.Ports.BusManager;
 using Mail.Sender.Ports.MailProviders;
 using Mail.Sender.Ports.ProviderFactories;
 using MassTransit;
@@ -16,26 +15,32 @@ namespace Mail.Sender.Config
 {
     public class Bootstrapper
     {
-        private ILog _logger = LogManager.GetLogger<Bootstrapper>();
-        public IContainer Container { get; }
+        private readonly IContainer _container;
+        private IBusManager _busManager;
 
         public Bootstrapper()
         {
-            Container = ConfigureApplicationContainer();
+            _container = ConfigureApplicationContainer();
         }
         
         private IContainer ConfigureApplicationContainer()
         {
-            var settings = MailSenderSettings.Current();
-
             var builder = new ContainerBuilder();
-
+            
+            RegisterConfig(builder);
             RegisterConsumers(builder);
             RegisterLoggers(builder);
-            RegisterMessaging(builder, settings);
+            RegisterMessaging(builder);
             RegisterMailProviders(builder);
 
             return builder.Build();
+        }
+
+        private void RegisterConfig(ContainerBuilder builder)
+        {
+            builder.Register(context => MailSenderSettings.Current())
+                .As<IMailSenderSettings>()
+                .SingleInstance();
         }
 
         private void RegisterMailProviders(ContainerBuilder builder)
@@ -59,46 +64,26 @@ namespace Mail.Sender.Config
             builder.RegisterInstance(LogManager.GetLogger<Bootstrapper>()).As<ILog>();
         }
 
-        private void RegisterMessaging(ContainerBuilder builder, MailSenderSettings settings)
+        private void RegisterMessaging(ContainerBuilder builder)
         {
-            builder.Register(context =>
-                {
-                    var busControl = Bus.Factory.CreateUsingRabbitMq(cfg =>
-                    {
-                        var innerContext = context.Resolve<IComponentContext>();
-                        var host = cfg.Host(new Uri("rabbitmq://" + settings.BrokerSettings.HostName), h =>
-                        {
-                            h.Username(settings.BrokerSettings.UserName);
-                            h.Password(settings.BrokerSettings.Password);
-                        });
-
-                        cfg.ReceiveEndpoint(host, "send_mail_queue", e =>
-                        {
-                            e.UseRetry(retryConfig =>
-                            {
-                                retryConfig.Handle<MailSendOperationFailedException>();
-                                retryConfig.Ignore<MailProviderRegistrationMissingException>();
-                                retryConfig.Interval(settings.RetrySettings.Count, TimeSpan.FromMilliseconds(settings.RetrySettings.Interval));
-                            });
-                            e.Consumer(innerContext.Resolve<SendMailConsumer>);
-                        });
-
-                        cfg.ReceiveEndpoint(host, "send_mail_order_queue", e =>
-                        {
-                            e.UseRetry(retryConfig =>
-                            {
-                                retryConfig.Interval(settings.RetrySettings.Count, TimeSpan.FromMilliseconds(settings.RetrySettings.Interval));
-                            });
-                            e.Consumer(innerContext.Resolve<SendMailOrderConsumer>);
-                        });
-
-                        cfg.UseInMemoryScheduler();
-                    });
-
-                    return busControl;
-                })
+            builder.Register(context => new BusManager(
+                context.Resolve<SendMailConsumer>(),
+                context.Resolve<SendMailOrderConsumer>(),
+                context.Resolve<IMailSenderSettings>()
+                ))
                 .SingleInstance()
-                .As<IBusControl>();
+                .As<IBusManager>();
+        }
+
+        public void Start()
+        {
+            _busManager = _container.Resolve<IBusManager>();
+            _busManager.Start();
+        }
+
+        public void Stop()
+        {
+            _busManager?.Stop();
         }
     }
 }

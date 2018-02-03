@@ -41,8 +41,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Config\BrokerSettings.cs" />
-    <Compile Include="Contracts\IHoldMailData.cs" />
-    <Compile Include="Contracts\IHoldMailOrderData.cs" />
+    <Compile Include="Contracts\IMailContent.cs" />
+    <Compile Include="Contracts\IMailOrder.cs" />
     <Compile Include="Contracts\MessageType.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

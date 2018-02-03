@@ -122,8 +122,10 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Adapters\BusManager\IBusManager.cs" />
     <Compile Include="Config\Bootstrapper.cs" />
     <Compile Include="Config\BrokerSettings.cs" />
+    <Compile Include="Config\IMailSenderSettings.cs" />
     <Compile Include="Config\MailSenderService.cs" />
     <Compile Include="Config\MailSenderSettings.cs" />
     <Compile Include="Config\RetrySettings.cs" />
@@ -132,6 +134,7 @@
     <Compile Include="Domain\Exceptions\ExistingMailProviderRegisteredException.cs" />
     <Compile Include="Domain\Exceptions\MailProviderRegistrationMissingException.cs" />
     <Compile Include="Domain\Exceptions\MailSendOperationFailedException.cs" />
+    <Compile Include="Ports\BusManager\BusManager.cs" />
     <Compile Include="Ports\MailProviders\ABCMailProvider.cs" />
     <Compile Include="Ports\MailProviders\CDCMailProvider.cs" />
     <Compile Include="Adapters\ProviderFactories\IMailProviderFactory.cs" />

@@ -24,7 +24,7 @@ namespace Mail.Host.Domain.Handlers
             MessageType type;
             Enum.TryParse(command.Type, true, out type);
 
-            _busController.Publish<IHoldMailOrderData>(new SendMailOrderDataMessage(
+            _busController.Publish<IMailOrder>(new SendMailOrderDataMessage(
                 command.Sender,
                 command.Destination,
                 type,

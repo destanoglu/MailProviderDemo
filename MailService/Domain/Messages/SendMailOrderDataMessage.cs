@@ -3,7 +3,7 @@ using Mail.Shared.Contracts;
 
 namespace Mail.Host.Domain.Messages
 {
-    public class SendMailOrderDataMessage : IHoldMailOrderData
+    public class SendMailOrderDataMessage : IMailOrder
     {
         public string Sender { get; }
         public string Destination { get; }

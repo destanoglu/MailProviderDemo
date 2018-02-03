@@ -22,7 +22,7 @@ namespace Mail.UnitTests.Domain.Handlers
         {
             busControl.Setup(
                 x => 
-                x.Publish(It.IsAny<IHoldMailOrderData>(), It.IsAny<CancellationToken>())).Returns(Task.FromResult(""));
+                x.Publish(It.IsAny<IMailOrder>(), It.IsAny<CancellationToken>())).Returns(Task.FromResult(""));
 
             handler = new CreateSendMailOrderCommandHandler(busControl.Object);
             _successfullCommand = new CreateSendMailOrderCommand("od", "ck", "body", MessageType.OrderMail.ToString(), DateTime.Now);

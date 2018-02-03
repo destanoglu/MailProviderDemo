@@ -6,7 +6,7 @@ using MassTransit;
 
 namespace Mail.Sender.Domain.Consumers
 {
-    public class SendMailConsumer : IConsumer<IHoldMailData>
+    public class SendMailConsumer : IConsumer<IMailContent>
     {
         private readonly IMailProviderFactory _factory;
         private readonly ILog _logger;
@@ -17,7 +17,7 @@ namespace Mail.Sender.Domain.Consumers
             _logger = logger;
         }
 
-        public Task Consume(ConsumeContext<IHoldMailData> context)
+        public Task Consume(ConsumeContext<IMailContent> context)
         {
             var mailProvider = _factory.GetMailProvider(context.Message.Type);
             mailProvider.SendMail(context.Message);

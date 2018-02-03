@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace Mail.Sender.Config
 {
-    public class MailSenderSettings
+    public class MailSenderSettings : IMailSenderSettings
     {
         private static MailSenderSettings _serviceSettings;
         public string ApplicationBaseUrls { get; set; }

@@ -71,7 +71,7 @@ namespace Mail.Host.Config
                 {
                     var busControl = Bus.Factory.CreateUsingRabbitMq(cfg =>
                     {
-                        var host = cfg.Host(new Uri("rabbitmq://" + settings.BrokerSettings.HostName), h =>
+                        cfg.Host(new Uri("rabbitmq://" + settings.BrokerSettings.HostName), h =>
                         {
                             h.Username(settings.BrokerSettings.UserName);
                             h.Password(settings.BrokerSettings.Password);

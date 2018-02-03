@@ -27,19 +27,20 @@ namespace Mail.Host.Config
                 UrlReservations = new UrlReservations { CreateAutomatically = true}
             }, settings.BaseUrlsAsArray());
             
-            _logger.Info("Starting service");
+            _logger.Info("Starting the service");
             _nancyHost.Start();
-            _logger.Info("Starting is running");
+            _logger.Info("Service is running");
         }
 
         public void StopService()
         {
-            _logger.Info("Stopping service");
+            _logger.Info("Stopping the service");
+            _nancyHost.Stop();
         }
 
         public void Dispose()
         {
-            _logger.Info("Disposing service");
+            _logger.Info("Disposing the service");
             StopService();
         }
     }

@@ -6,6 +6,6 @@ namespace Mail.Sender.Adapters.MailProviders
     public interface ISendMail
     {
         IList<MessageType> AssociatedMailTypes { get; }
-        void SendMail(IHoldMailData data);
+        void SendMail(IMailContent data);
     }
 }

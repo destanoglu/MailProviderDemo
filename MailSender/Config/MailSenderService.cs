@@ -1,13 +1,11 @@
 ﻿using System;
-using Autofac;
 using Common.Logging;
-using MassTransit;
 
 namespace Mail.Sender.Config
 {
     public class MailSenderService : IDisposable
     {
-        private static readonly ILog _logger = LogManager.GetLogger<MailSenderService>();
+        private readonly ILog _logger = LogManager.GetLogger<MailSenderService>();
 
         private readonly Bootstrapper _bootstrapper;
 
@@ -20,20 +18,17 @@ namespace Mail.Sender.Config
             _bootstrapper = bootstrapper;
         }
 
-        public void StartService(MailSenderSettings settings)
+        public void StartService()
         {
-            var busController = _bootstrapper.Container.Resolve<IBusControl>();
-
             _logger.Info("Starting service");
-            busController.Start();
+            _bootstrapper.Start();
             _logger.Info("Starting is running");
         }
 
         public void StopService()
         {
             _logger.Info("Stopping service");
-            var busController = _bootstrapper.Container.Resolve<IBusControl>();
-            busController.Stop();
+            _bootstrapper.Stop();
         }
 
         public void Dispose()

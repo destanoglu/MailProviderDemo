@@ -2,7 +2,7 @@
 
 namespace Mail.Sender.Domain.Messages
 {
-    public class SendMailDataMessage : IHoldMailData
+    public class SendMailDataMessage : IMailContent
     {
         public string Sender { get; }
         public string Destination { get; }

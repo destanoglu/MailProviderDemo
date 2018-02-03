@@ -17,7 +17,7 @@ namespace Mail.Sender.Ports.MailProviders
 
         public IList<MessageType> AssociatedMailTypes { get; }
 
-        public void SendMail(IHoldMailData data)
+        public void SendMail(IMailContent data)
         {
             Console.WriteLine($"Sending mail using {this.GetType().Name}, from {data.Sender} to {data.Destination}");
         }
