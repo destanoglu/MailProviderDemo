@@ -1,20 +1,22 @@
 ﻿using System;
+using System.Linq;
 using Mail.Host.Domain.Commands;
 using Mail.Host.Domain.Exceptions;
 using Paramore.Brighter;
-using MessageType = Mail.Shared.Contracts.MessageType;
 
 namespace Mail.Host.Domain.Handlers
 {
-    public class RequestValidationHandler<TRequest> : RequestHandler<TRequest> where TRequest : CreateSendMailOrderCommand
+    public class RequestValidationHandler<TRequest> : RequestHandler<TRequest> where TRequest : BaseCommand, IValidatable
     {
         public override TRequest Handle(TRequest command)
         {
-            MessageType type;
-            if (!Enum.TryParse(command.Type, out type))
+            var errors = command.Validate().ToList();
+
+            if (errors.Any())
             {
-                throw new MailTypeIsUndefinedException(command.Type);
+                throw new MailOrderValidationException(string.Join(Environment.NewLine, errors));
             }
+                
             return base.Handle(command);
         }
     }

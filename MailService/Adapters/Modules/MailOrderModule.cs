@@ -27,7 +27,7 @@ namespace Mail.Host.Adapters.Modules
                             request.ScheduleAt
                         ));
                 }
-                catch (MailTypeIsUndefinedException e)
+                catch (MailOrderValidationException e)
                 {
                     Console.WriteLine(e);
                     return HttpStatusCode.BadRequest;

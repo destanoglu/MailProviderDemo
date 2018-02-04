@@ -29,7 +29,7 @@ namespace Mail.UnitTests.Domain.Handlers
         }
 
         [TestMethod]
-        [ExpectedException(typeof(MailTypeIsUndefinedException))]
+        [ExpectedException(typeof(MailOrderValidationException))]
         public void it_should_not_validate_a_command_with_undefined_mail_type()
         {
             _validationHandler.Handle(_failedCommand);

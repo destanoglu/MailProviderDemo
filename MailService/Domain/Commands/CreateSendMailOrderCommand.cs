@@ -1,11 +1,11 @@
 ﻿using System;
-using Paramore.Brighter;
+using System.Collections.Generic;
+using Mail.Shared.Contracts;
 
 namespace Mail.Host.Domain.Commands
 {
-    public class CreateSendMailOrderCommand : IRequest
+    public class CreateSendMailOrderCommand : BaseCommand, IValidatable
     {
-        public Guid Id { get; set; }
         public string Sender { get; }
         public string Destination { get; }
         public string Body { get; }
@@ -20,6 +20,18 @@ namespace Mail.Host.Domain.Commands
             Body = body;
             Type = type;
             ScheduleAt = scheduleAt;
+        }
+
+        public IEnumerable<string> Validate()
+        {
+            var errors = new List<string>();
+            MessageType type;
+            if (!Enum.TryParse(Type, out type))
+            {
+                errors.Add($"Mail type is not suitable {Type}");
+            }
+
+            return errors;
         }
     }
 }

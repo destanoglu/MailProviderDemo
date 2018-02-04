@@ -144,13 +144,15 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Domain\Commands\BaseCommand.cs" />
+    <Compile Include="Domain\Commands\IValidatable.cs" />
     <Compile Include="Domain\Handlers\Attributes\RequestValidationAttribute.cs" />
     <Compile Include="Domain\Commands\CreateSendMailOrderCommand.cs" />
     <Compile Include="Config\Bootstrapper.cs" />
     <Compile Include="Config\MailDeliveryServiceSettings.cs" />
     <Compile Include="Config\MailDeliveryService.cs" />
     <Compile Include="Config\MailServiceHandlerFactory.cs" />
-    <Compile Include="Domain\Exceptions\MailTypeIsUndefinedException.cs" />
+    <Compile Include="Domain\Exceptions\MailOrderValidationException.cs" />
     <Compile Include="Domain\Handlers\CreateSendMailOrderCommandHandler.cs" />
     <Compile Include="Domain\Handlers\RequestValidationHandler.cs" />
     <Compile Include="Domain\Messages\SendMailOrderDataMessage.cs" />
